@@ -77,9 +77,20 @@ class ProductItemDetails extends Component {
     }
   }
 
+  continueShopping = () => {
+    const {history} = this.props
+    history.replace('/products')
+  }
+
   renderLoadingView = () => (
     <div className="products-details-loader-container">
-      <Loader type="ThreeDots" color="#0b69ff" height="50" width="50" />
+      <Loader
+        data-testid="loader"
+        type="ThreeDots"
+        color="#0b69ff"
+        height="50"
+        width="50"
+      />
     </div>
   )
 
@@ -91,7 +102,7 @@ class ProductItemDetails extends Component {
         className="error-view-image"
       />
       <h1 className="product-not-found-heading">Product Not Found</h1>
-      <button type="button" className="button">
+      <button type="button" className="button" onClick={this.continueShopping}>
         Continue Shopping
       </button>
     </div>
@@ -160,6 +171,7 @@ class ProductItemDetails extends Component {
                     type="button"
                     className="quantity-controller-button"
                     onClick={this.onDecrementQuantity}
+                    data-testid="minus"
                   >
                     <BsDashSquare className="quantity-controller-icon" />
                   </button>
@@ -168,6 +180,7 @@ class ProductItemDetails extends Component {
                     type="button"
                     className="quantity-controller-button"
                     onClick={this.onIncrementQuantity}
+                    data-testid="plus"
                   >
                     <BsPlusSquare className="quantity-controller-icon" />
                   </button>

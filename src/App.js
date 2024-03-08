@@ -18,10 +18,39 @@ class App extends Component {
   }
 
   addCartItem = product => {
-    this.setState(prevState => ({cartList: [...prevState.cartList, product]}))
+    const {cartList} = this.state
+    const itemPresentOnCart = cartList.filter(item => item.id === product.id)
+    console.log(itemPresentOnCart)
+    if (itemPresentOnCart.length === 0) {
+      this.setState(prevState => ({cartList: [...prevState.cartList, product]}))
+    } else {
+      const updatedCartList = cartList.map(item => {
+        if (item.id === product.id) {
+          const updatedQuantity = item.quantity + 1
+          const newItem = {...item, quantity: updatedQuantity}
+          return newItem
+        }
+        return item
+      })
+      this.setState({cartList: updatedCartList})
+      //  console.log(updatedCartList)
+    }
   }
 
-  deleteCartItem = () => {}
+  deleteCartItem = id => {
+    const {cartList} = this.state
+
+    const updatedCartList = cartList.filter(item => item.id !== id)
+    this.setState({cartList: updatedCartList})
+  }
+
+  clearCart = () => {
+    this.setState({cartList: []})
+  }
+
+  updateCartList = updatedCart => {
+    this.setState({cartList: updatedCart})
+  }
 
   render() {
     const {cartList} = this.state
@@ -33,6 +62,8 @@ class App extends Component {
             cartList,
             addCartItem: this.addCartItem,
             deleteCartItem: this.deleteCartItem,
+            clearCart: this.clearCart,
+            updateCartList: this.updateCartList,
           }}
         >
           <Switch>

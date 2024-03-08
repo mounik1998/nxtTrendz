@@ -8,11 +8,41 @@ import './index.css'
 const CartItem = props => (
   <CartContext.Consumer>
     {value => {
-      const {deleteCartItem} = value
+      const {deleteCartItem, cartList, updateCartList} = value
       const {cartItemDetails} = props
       const {id, title, brand, quantity, price, imageUrl} = cartItemDetails
       const onDeleteCartItem = () => {
         deleteCartItem(id)
+      }
+      const increaseQuantity = () => {
+        // console.log(cartList)
+
+        const updatedCartList = cartList.map(item => {
+          if (item.id === id) {
+            const updatedQuantity = item.quantity + 1
+            const newItem = {...item, quantity: updatedQuantity}
+            return newItem
+          }
+          return item
+        })
+
+        //  console.log(updatedCartList)
+        updateCartList(updatedCartList)
+      }
+      const decreaseQuantity = () => {
+        // console.log(cartList)
+
+        const updatedCartList = cartList.map(item => {
+          if (item.id === id) {
+            const updatedQuantity = item.quantity === 0 ? 0 : item.quantity - 1
+            const newItem = {...item, quantity: updatedQuantity}
+            return newItem
+          }
+          return item
+        })
+
+        // console.log(updatedCartList)
+        updateCartList(updatedCartList)
       }
       return (
         <li className="cart-item">
@@ -23,11 +53,21 @@ const CartItem = props => (
               <p className="cart-product-brand">by {brand}</p>
             </div>
             <div className="cart-quantity-container">
-              <button type="button" className="quantity-controller-button">
+              <button
+                data-testid="minus"
+                type="button"
+                className="quantity-controller-button"
+                onClick={decreaseQuantity}
+              >
                 <BsDashSquare color="#52606D" size={12} />
               </button>
               <p className="cart-quantity">{quantity}</p>
-              <button type="button" className="quantity-controller-button">
+              <button
+                data-testid="plus"
+                type="button"
+                className="quantity-controller-button"
+                onClick={increaseQuantity}
+              >
                 <BsPlusSquare color="#52606D" size={12} />
               </button>
             </div>
@@ -43,6 +83,7 @@ const CartItem = props => (
             </div>
           </div>
           <button
+            data-testid="remove"
             className="delete-button"
             type="button"
             onClick={onDeleteCartItem}
